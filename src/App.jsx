@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import './App.sass';
 import Layout from './components/Layout/Layout';
-import BurgerBuilder from './containers/BurgerBuilder/BurgerBuilder';
+import BurgerBuilder from './containers/BurgerBuilder/BurgerBulder';
 
 class App extends Component {
+  state = {};
+
   render() {
     return (
-      <div className="App">
+      <div className="app">
         <Layout>
           <BurgerBuilder />
         </Layout>
