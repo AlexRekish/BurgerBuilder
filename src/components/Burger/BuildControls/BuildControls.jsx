@@ -19,7 +19,7 @@ const BuildControls = ({
 }) => (
   <div className="build-controls">
     <p>
-      Current Price:
+      {'Current Price: '}
       <strong>{price.toFixed(2)}</strong>
     </p>
     {controls.map(ctrl => (
