@@ -1,14 +1,12 @@
 import React from 'react';
+import { NavLink } from 'react-router-dom';
 import './NavigationItem.sass';
 
-const NavigationItem = ({ link, children, active }) => (
+const NavigationItem = ({ link, children }) => (
   <li className="navigation__list-item">
-    <a
-      className={active ? 'navigation__link navigation__link--active' : 'navigation__link'}
-      href={link}
-    >
+    <NavLink className="navigation__link" to={link} activeClassName="navigation__link--active">
       {children}
-    </a>
+    </NavLink>
   </li>
 );
 

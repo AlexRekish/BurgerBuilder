@@ -4,10 +4,8 @@ import './NavigationList.sass';
 
 const NavigationList = () => (
   <ul className="navigation__list">
-    <NavigationItem link="/" active>
-      Burger Builder
-    </NavigationItem>
-    <NavigationItem link="/">Checkout</NavigationItem>
+    <NavigationItem link="/builder">Burger Builder</NavigationItem>
+    <NavigationItem link="/orders">Orders</NavigationItem>
   </ul>
 );
 

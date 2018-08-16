@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import _ from 'lodash';
-import { toast } from 'react-toastify';
+// import qs from 'query-string';
 import Burger from '../../components/Burger/Burger';
 import BuildControls from '../../components/Burger/BuildControls/BuildControls';
 import Modal from '../../components/UI/Modal/Modal';
 import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary';
-import { saveOrder, getIngredients } from '../../services/orderService';
+import { getIngredients } from '../../services/orderService';
 
 const PRICES = {
   salad: 0.4,
@@ -23,7 +23,8 @@ class BurgerBuilder extends Component {
   };
 
   async componentDidMount() {
-    const { data: ingredients } = await getIngredients();
+    let { data: ingredients } = await getIngredients();
+    ingredients = { ...ingredients };
     this.setState({ ingredients });
   }
 
@@ -40,29 +41,14 @@ class BurgerBuilder extends Component {
     this.setState({ purchased: false });
   };
 
-  continuePurchaseHandler = async () => {
-    const { ingredients, totalPrice: price } = this.state;
-    const order = {
+  continuePurchaseHandler = () => {
+    const { ingredients, totalPrice } = this.state;
+    const { history } = this.props;
+    const orderData = {
       ingredients,
-      price: price.toFixed(2),
-      customer: {
-        name: 'Alex',
-        address: {
-          street: 'Test street 1',
-          zipCode: '12345',
-          country: 'Belarus'
-        },
-        email: 'test@test.com',
-        deliveryMethod: 'fastest'
-      }
+      totalPrice: +totalPrice.toFixed(2)
     };
-    try {
-      this.setState({ purchased: false });
-      await saveOrder(order);
-      toast('Order send successfully!');
-    } catch (err) {
-      this.setState({ purchased: true });
-    }
+    history.push('/checkout', orderData);
   };
 
   addIngredientHandler = type => {

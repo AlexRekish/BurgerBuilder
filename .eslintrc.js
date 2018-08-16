@@ -15,16 +15,18 @@ module.exports = {
     'no-param-reassign': 'off',
     'react/prop-types': 'off',
     'react/no-array-index-key': 'off',
+    'no-empty': 'off',
+    'react/no-unused-state': 'off'
   },
   env: {
     jest: true,
-    browser: true,
+    browser: true
   },
   parserOptions: {
     ecmaVersion: 8,
     sourceType: 'module',
     ecmaFeatures: {
-      jsx: true,
-    },
-  },
+      jsx: true
+    }
+  }
 };
