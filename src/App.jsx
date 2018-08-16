@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
-import './App.sass';
+import { ToastContainer } from 'react-toastify';
 import Layout from './containers/Layout/Layout';
 import BurgerBuilder from './containers/BurgerBuilder/BurgerBulder';
+import './App.sass';
+import 'react-toastify/dist/ReactToastify.css';
 
 class App extends Component {
   state = {};
@@ -9,6 +11,7 @@ class App extends Component {
   render() {
     return (
       <div className="app">
+        <ToastContainer />
         <Layout>
           <BurgerBuilder />
         </Layout>
