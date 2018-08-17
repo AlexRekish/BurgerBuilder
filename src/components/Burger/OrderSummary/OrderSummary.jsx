@@ -28,10 +28,10 @@ const OrderSummary = ({ ingredients, onOrderContinued, onOrderCancelled, price }
         </strong>
       </p>
       <p>Continue to checkout?</p>
-      <Button type="danger" clicked={onOrderCancelled}>
+      <Button styleType="danger" clicked={onOrderCancelled}>
         Cancel
       </Button>
-      <Button type="success" clicked={onOrderContinued}>
+      <Button styleType="success" clicked={onOrderContinued}>
         Continue
       </Button>
     </React.Fragment>

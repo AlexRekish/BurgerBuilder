@@ -1,8 +1,13 @@
 import React from 'react';
 import './Button.sass';
 
-const Button = ({ clicked, type, children }) => (
-  <button type="button" className={['button', `button--${type}`].join(' ')} onClick={clicked}>
+const Button = ({ type, clicked, styleType, children, disabled }) => (
+  <button
+    type={type || 'button'}
+    className={['button', `button--${styleType}`].join(' ')}
+    onClick={clicked}
+    disabled={disabled}
+  >
     {children}
   </button>
 );

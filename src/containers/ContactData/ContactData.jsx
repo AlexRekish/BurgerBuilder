@@ -1,25 +1,51 @@
-import React, { Component } from 'react';
+import React from 'react';
+import Joi from 'joi-browser';
 import { toast } from 'react-toastify';
 import Button from '../../components/UI/Button/Button';
 import { saveOrder } from '../../services/orderService';
+import Form from '../../components/UI/Form/Form';
 import './ContactData.sass';
 
-class ContactData extends Component {
+class ContactData extends Form {
   state = {
-    name: 'Alex',
-    email: 'test@test.com',
-    address: {
-      street: 'test street',
-      postalCode: '12345'
-    }
+    data: {
+      name: '',
+      email: '',
+      street: '',
+      postalCode: '',
+      deliveryMethod: 'Fastest'
+    },
+    deliveryMethods: ['Fastest', 'Cheapest'],
+    errors: {}
   };
 
-  orderHandler = async () => {
+  schema = {
+    name: Joi.string()
+      .min(2)
+      .max(40)
+      .required(),
+    email: Joi.string()
+      .min(5)
+      .max(50)
+      .email()
+      .required(),
+    street: Joi.string()
+      .min(5)
+      .max(30)
+      .required(),
+    postalCode: Joi.string()
+      .min(1)
+      .max(10)
+      .required(),
+    deliveryMethod: Joi.required()
+  };
+
+  onSubmitted = async () => {
     const { history, location } = this.props;
     const order = {
       ingredients: location.state.ingredients,
       totalPrice: location.state.totalPrice,
-      ...this.state
+      ...this.state.data
     };
     try {
       await saveOrder(order);
@@ -32,17 +58,18 @@ class ContactData extends Component {
     return (
       <div className="contact-data">
         <h4>Enter your contact data</h4>
-        <form>
-          <input className="contact-data__field" type="text" placeholder="Name" name="name" />
-          <input className="contact-data__field" type="email" placeholder="Email" name="name" />
-          <input className="contact-data__field" type="text" placeholder="Street" name="name" />
-          <input
-            className="contact-data__field"
-            type="text"
-            placeholder="Postal code"
-            name="name"
-          />
-          <Button type="success" clicked={this.orderHandler}>
+        <form className="contact-data__form" onSubmit={this.formSubmitHandler}>
+          {this.renderInput('name', 'Name', 'Enter your name', 'text')}
+          {this.renderInput('email', 'Email', 'Enter your email', 'email')}
+          {this.renderInput('street', 'Street', 'Enter your street', 'text')}
+          {this.renderInput('postalCode', 'Post code', 'Enter your post code', 'text')}
+          {this.renderSelect('deliveryMethod', 'Delivery method', this.state.deliveryMethods)}
+          <Button
+            type="submit"
+            styleType="success"
+            clicked={this.formSubmitHandler}
+            disabled={this.validate()}
+          >
             Order now!
           </Button>
         </form>

@@ -1,19 +1,41 @@
 .button
   background-color: transparent
-  border: none
   color: white
   outline: none
   cursor: pointer
   font: inherit
   padding: 10px
   margin: 10px
+  width: 120px
   font-weight: bold
-  &:first-of-type
-    margin-left: 0
-    padding-left: 0
+  text-align: center
+  border-radius: 5px
+  transition: all 0.4s ease
 
 .button--success
   color: #5C9210
+  border: 2px solid #5C9210
+
+  &:hover
+    color: white
+    background-color: #5C9210
+
+  &:disabled
+    color: rgba(#5C9210, 0.5)
+    border-color: rgba(#5C9210, 0.5)
+    &:hover
+      background-color: transparent
 
 .button--danger
   color: #944317
+  border: 2px solid #944317
+
+  &:hover
+    color: white
+    background-color: #944317
+
+    &:disabled
+      color: rgba(#944317, 0.5)
+      border-color: rgba(#944317, 0.5)
+      &:hover
+        background-color: transparent
