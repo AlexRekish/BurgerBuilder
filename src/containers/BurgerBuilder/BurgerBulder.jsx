@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import _ from 'lodash';
-// import qs from 'query-string';
+import { connect } from 'react-redux';
 import Burger from '../../components/Burger/Burger';
 import BuildControls from '../../components/Burger/BuildControls/BuildControls';
 import Modal from '../../components/UI/Modal/Modal';
 import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary';
-import { getIngredients } from '../../services/orderService';
+import Action from '../../store/actions';
 
 const PRICES = {
   salad: 0.4,
@@ -16,19 +16,16 @@ const PRICES = {
 
 class BurgerBuilder extends Component {
   state = {
-    ingredients: null,
-    totalPrice: 4,
-    purchasable: false,
     purchased: false
   };
 
-  async componentDidMount() {
-    let { data: ingredients } = await getIngredients();
-    ingredients = { ...ingredients };
-    this.setState({ ingredients });
-  }
+  // async componentDidMount() {
+  //   let { data: ingredients } = await getIngredients();
+  //   ingredients = { ...ingredients };
+  //   this.setState({ ingredients });
+  // }
 
-  changePurchasable = ingredients => {
+  checkPurchasable = ingredients => {
     const sum = _.values(ingredients).reduce((arr, next) => arr + next);
     return sum > 0;
   };
@@ -42,62 +39,30 @@ class BurgerBuilder extends Component {
   };
 
   continuePurchaseHandler = () => {
-    const { ingredients, totalPrice } = this.state;
     const { history } = this.props;
-    const orderData = {
-      ingredients,
-      totalPrice: +totalPrice.toFixed(2)
-    };
-    history.push('/checkout', orderData);
-  };
-
-  addIngredientHandler = type => {
-    const { ingredients, totalPrice } = this.state;
-    const newIngredients = { ...ingredients };
-    newIngredients[type]++;
-
-    const newPrice = totalPrice + PRICES[type];
-    this.setState({
-      ingredients: newIngredients,
-      totalPrice: newPrice,
-      purchasable: this.changePurchasable(newIngredients)
-    });
-  };
-
-  removeIngredientHandler = type => {
-    const { ingredients, totalPrice } = this.state;
-    if (!ingredients[type]) return;
-
-    const newIngredients = { ...ingredients };
-    newIngredients[type]--;
-
-    const newPrice = totalPrice - PRICES[type];
-    this.setState({
-      ingredients: newIngredients,
-      totalPrice: newPrice,
-      purchasable: this.changePurchasable(newIngredients)
-    });
+    history.push('/checkout');
   };
 
   render() {
-    const { ingredients, totalPrice, purchasable, purchased } = this.state;
+    const { purchased } = this.state;
+    const { onAddIngredient, onDeleteIngredient, ingredients, price } = this.props;
     return ingredients ? (
       <React.Fragment>
         <Modal purchased={purchased} canceled={this.cancelPurchaseHandler}>
           <OrderSummary
             ingredients={ingredients}
-            price={totalPrice}
+            price={price}
             onOrderCancelled={this.cancelPurchaseHandler}
             onOrderContinued={this.continuePurchaseHandler}
           />
         </Modal>
         <Burger ingredients={ingredients} />
         <BuildControls
-          price={totalPrice}
+          price={price}
           ingredients={ingredients}
-          onAddIngredient={this.addIngredientHandler}
-          onRemoveIngredient={this.removeIngredientHandler}
-          purchasable={purchasable}
+          onAddIngredient={onAddIngredient}
+          onRemoveIngredient={onDeleteIngredient}
+          purchasable={this.checkPurchasable(ingredients)}
           purchased={this.changePurchased}
         />
       </React.Fragment>
@@ -105,4 +70,19 @@ class BurgerBuilder extends Component {
   }
 }
 
-export default BurgerBuilder;
+const mapStateToProps = state => ({
+  ingredients: state.ingredients,
+  price: state.totalPrice
+});
+
+const mapDispatchToProps = dispatch => ({
+  onAddIngredient: ingType =>
+    dispatch({ type: Action.ADD_INGREDIENT, ingType, cost: PRICES[ingType] }),
+  onDeleteIngredient: ingType =>
+    dispatch({ type: Action.DELETE_INGREDIENT, ingType, cost: PRICES[ingType] })
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(BurgerBuilder);

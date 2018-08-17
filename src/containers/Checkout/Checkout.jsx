@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import CheckoutSummary from '../../components/Order/CheckoutSummary/CheckoutSummary';
 
 class Checkout extends Component {
   continuePurchaseHandler = async () => {
-    const { history, location } = this.props;
-    history.push('/checkout/contact-data', location.state);
+    const { history } = this.props;
+    history.push('/checkout/contact-data');
   };
 
   cancelPurchaseHandler = () => {
@@ -13,8 +14,7 @@ class Checkout extends Component {
   };
 
   render() {
-    const { location } = this.props;
-    const { ingredients } = location.state;
+    const { ingredients } = this.props;
     return ingredients ? (
       <div>
         <CheckoutSummary
@@ -27,4 +27,9 @@ class Checkout extends Component {
   }
 }
 
-export default Checkout;
+const mapStateToProps = state => ({
+  ingredients: state.ingredients,
+  price: state.totalPrice
+});
+
+export default connect(mapStateToProps)(Checkout);

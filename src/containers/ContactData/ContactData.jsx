@@ -1,6 +1,7 @@
 import React from 'react';
 import Joi from 'joi-browser';
 import { toast } from 'react-toastify';
+import { connect } from 'react-redux';
 import Button from '../../components/UI/Button/Button';
 import { saveOrder } from '../../services/orderService';
 import Form from '../../components/UI/Form/Form';
@@ -41,10 +42,10 @@ class ContactData extends Form {
   };
 
   onSubmitted = async () => {
-    const { history, location } = this.props;
+    const { history, ingredients, price } = this.props;
     const order = {
-      ingredients: location.state.ingredients,
-      totalPrice: location.state.totalPrice,
+      ingredients,
+      totalPrice: price,
       ...this.state.data
     };
     try {
@@ -78,4 +79,9 @@ class ContactData extends Form {
   }
 }
 
-export default ContactData;
+const mapStateToProps = state => ({
+  ingredients: state.ingredients,
+  price: state.totalPrice
+});
+
+export default connect(mapStateToProps)(ContactData);
