@@ -5,7 +5,7 @@ import Burger from '../../components/Burger/Burger';
 import BuildControls from '../../components/Burger/BuildControls/BuildControls';
 import Modal from '../../components/UI/Modal/Modal';
 import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary';
-import Action from '../../store/actions';
+import { Action } from '../../store/actions/actions';
 
 const PRICES = {
   salad: 0.4,
@@ -19,11 +19,10 @@ class BurgerBuilder extends Component {
     purchased: false
   };
 
-  // async componentDidMount() {
-  //   let { data: ingredients } = await getIngredients();
-  //   ingredients = { ...ingredients };
-  //   this.setState({ ingredients });
-  // }
+  componentDidMount() {
+    const { initIngredients } = this.props;
+    initIngredients();
+  }
 
   checkPurchasable = ingredients => {
     const sum = _.values(ingredients).reduce((arr, next) => arr + next);
@@ -76,10 +75,9 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  onAddIngredient: ingType =>
-    dispatch({ type: Action.ADD_INGREDIENT, ingType, cost: PRICES[ingType] }),
-  onDeleteIngredient: ingType =>
-    dispatch({ type: Action.DELETE_INGREDIENT, ingType, cost: PRICES[ingType] })
+  onAddIngredient: ingType => dispatch(Action.addIngredient(ingType, PRICES[ingType])),
+  onDeleteIngredient: ingType => dispatch(Action.deleteIngredient(ingType, PRICES[ingType])),
+  initIngredients: () => dispatch(Action.initIngredients())
 });
 
 export default connect(

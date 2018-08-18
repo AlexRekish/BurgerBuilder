@@ -1,4 +1,5 @@
 import React from 'react';
+import { Redirect } from 'react-router-dom';
 import Joi from 'joi-browser';
 import { toast } from 'react-toastify';
 import { connect } from 'react-redux';
@@ -56,7 +57,8 @@ class ContactData extends Form {
   };
 
   render() {
-    return (
+    const { ingredients } = this.props;
+    return ingredients ? (
       <div className="contact-data">
         <h4>Enter your contact data</h4>
         <form className="contact-data__form" onSubmit={this.formSubmitHandler}>
@@ -75,6 +77,8 @@ class ContactData extends Form {
           </Button>
         </form>
       </div>
+    ) : (
+      <Redirect to="/" />
     );
   }
 }

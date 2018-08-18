@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
 import CheckoutSummary from '../../components/Order/CheckoutSummary/CheckoutSummary';
 
 class Checkout extends Component {
@@ -23,7 +24,9 @@ class Checkout extends Component {
           onCancel={this.cancelPurchaseHandler}
         />
       </div>
-    ) : null;
+    ) : (
+      <Redirect to="/" />
+    );
   }
 }
 
